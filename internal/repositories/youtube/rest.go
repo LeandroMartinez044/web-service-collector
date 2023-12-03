@@ -94,6 +94,6 @@ func buildDirectoryPath() string {
 	if err != nil {
 		fmt.Println("Error getting currect directory:", err)
 	}
-	elementos := strings.Split(directory, "web-service-lmenglish")
-	return elementos[0] + "web-service-lmenglish/resources"
+	elementos := strings.Split(directory, "web-service-collector")
+	return elementos[0] + "/web-service-collector/resources"
 }

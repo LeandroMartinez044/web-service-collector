@@ -10,11 +10,14 @@ import (
 )
 
 type service struct {
-	ytldRepo ports.YoutubeRepository
+	ytldRepo            ports.YoutubeRepository
+	collectorRepository ports.CollectorRepository
 }
 
-func New(youtubeRepo ports.YoutubeRepository) ports.CollectorService {
-	return &service{youtubeRepo}
+func New(
+	youtubeRepo ports.YoutubeRepository,
+	collectorRepository ports.CollectorRepository) ports.CollectorService {
+	return &service{youtubeRepo, collectorRepository}
 }
 
 // videoId: generate subtitle URL
@@ -36,11 +39,12 @@ func (srv *service) StoreSubtitlesByVideoId(videoId string) error {
 	words := extractWords(file, videoId)
 	defer file.Close()
 
+	for _, word := range words {
+		srv.collectorRepository.Save(word)
+	}
+
 	// Removes file
 	srv.ytldRepo.RemoveFile(videoId)
-
-	// Saves the words to Node
-	print(words)
 
 	return nil
 }
@@ -78,7 +82,7 @@ func extractWords(file *os.File, videoId string) []domain.Word {
 
 		// Recorrer el slice utilizando la forma mejorada del bucle for
 		for _, w := range strings.Fields(linea) {
-			word := domain.NewWord(w, *video)
+			word := domain.NewWord(w, linea, *video)
 			words = append(words, *word)
 		}
 

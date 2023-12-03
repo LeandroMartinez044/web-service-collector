@@ -7,9 +7,8 @@ import (
 
 func main() {
 
-	d := dependencies.InitDependencies()
+	d := dependencies.NewByEnvironment()
 	router := gin.Default()
 	router.POST("/generate", d.CollectorHandler.GenerateSubtitles)
-
 	router.Run("localhost:8080")
 }

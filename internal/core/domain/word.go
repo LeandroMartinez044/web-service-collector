@@ -2,10 +2,11 @@ package domain
 
 // word represents data about a word.
 type Word struct {
-	word  string
-	video Video
+	Word     string
+	Sentence string
+	Video    Video
 }
 
-func NewWord(word string, video Video) *Word {
-	return &Word{word: word, video: video}
+func NewWord(word string, sentence string, video Video) *Word {
+	return &Word{Word: word, Sentence: sentence, Video: video}
 }
