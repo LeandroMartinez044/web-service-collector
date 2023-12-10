@@ -16,7 +16,7 @@ func main() {
 	router.GET("/check", d.CollectorHandler.Check)
 
 	http.HandleFunc("/", hello)
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":8080", router)
 
 }
 
