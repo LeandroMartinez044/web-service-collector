@@ -1,5 +1,5 @@
 # Use an official Golang runtime as a base image
-FROM golang:lastest
+FROM golang:1.20
 
 # Set the working directory inside the container
 WORKDIR ./cmd/api/
