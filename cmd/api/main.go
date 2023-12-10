@@ -12,5 +12,6 @@ func main() {
 	router.POST("/generate", d.CollectorHandler.GenerateSubtitles)
 	router.GET("/videos/:word", d.CollectorHandler.GetVideosByWord)
 	router.GET("/check", d.CollectorHandler.Check)
-	router.Run("52.207.222.195:8080")
+
+	router.Run("0.0.0.0:8080")
 }
