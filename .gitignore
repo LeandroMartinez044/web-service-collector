@@ -24,6 +24,7 @@
 _obj
 _test
 vendor
+resources
 
 # Architecture specific extensions/prefixes
 *.[568vq]

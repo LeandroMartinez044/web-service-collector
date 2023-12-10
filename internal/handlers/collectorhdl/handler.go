@@ -10,10 +10,12 @@ import (
 
 type Handler struct {
 	collectorSrv ports.CollectorService
+	finderSrv    ports.FinderService
 }
 
-func New(collectorSrv ports.CollectorService) *Handler {
-	return &Handler{collectorSrv: collectorSrv}
+func New(collectorSrv ports.CollectorService,
+	finderSrv ports.FinderService) *Handler {
+	return &Handler{collectorSrv: collectorSrv, finderSrv: finderSrv}
 }
 
 type RequestData struct {
@@ -37,4 +39,32 @@ func (h *Handler) GenerateSubtitles(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Data received successfully"})
+}
+
+type VideoDto struct {
+	Url       string `json:"url"`
+	StartTime string `json:"start_time"`
+	EndTime   string `json:"end_time"`
+}
+
+// Get Video
+func (h *Handler) GetVideosByWord(c *gin.Context) {
+
+	// Get the ID parameter from the URL
+	word := c.Param("word")
+
+	videos, err := h.finderSrv.FindVideosBy(word)
+
+	var videoDtoList []VideoDto
+
+	for _, video := range videos {
+		videoDto := VideoDto{video.ID, video.StartTime, video.EndTime}
+		videoDtoList = append(videoDtoList, videoDto)
+	}
+
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("%d", err)})
+	}
+
+	c.JSON(http.StatusOK, videoDtoList)
 }

@@ -13,7 +13,11 @@ type YoutubeRepository interface {
 	GetFileLocation(videoId string) (string, error)
 }
 
-type CollectorRepository interface {
-	Save(word domain.Word)
+type WordRepository interface {
+	Put(word string, sentence string, videoId string, videoStartTime string, videoEndTime string)
 	Find(word string) ([]domain.Word, error)
+}
+
+type VideoRepository interface {
+	Find(word string) ([]domain.Video, error)
 }

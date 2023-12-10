@@ -2,14 +2,18 @@ package dependencies
 
 import (
 	"errors"
+	"log"
 	"os"
 
 	"github.com/LeandroMartinez044/lmenglish/collector/internal/core/ports"
-	"github.com/LeandroMartinez044/lmenglish/collector/internal/core/services/collectorsrv"
+	collectorsrv "github.com/LeandroMartinez044/lmenglish/collector/internal/core/services/collectorsrv"
+	"github.com/LeandroMartinez044/lmenglish/collector/internal/core/services/findersrv"
 	"github.com/LeandroMartinez044/lmenglish/collector/internal/handlers/collectorhdl"
-	"github.com/LeandroMartinez044/lmenglish/collector/internal/repositories/collector"
-	"github.com/LeandroMartinez044/lmenglish/collector/internal/repositories/mongodb"
+	wordrepo "github.com/LeandroMartinez044/lmenglish/collector/internal/repositories/wordrepo"
 	"github.com/LeandroMartinez044/lmenglish/collector/internal/repositories/youtube"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
 )
 
 type Definition struct {
@@ -17,13 +21,14 @@ type Definition struct {
 	//
 	// Repositories
 	//
-	YoutubeRepository   ports.YoutubeRepository
-	CollectorRepository ports.CollectorRepository
+	YoutubeRepository ports.YoutubeRepository
+	WordRepository    ports.WordRepository
 
 	//
 	// Core
 	//
 	CollectorService ports.CollectorService
+	FinderService    ports.FinderService
 
 	//
 	// Handlers
@@ -33,41 +38,66 @@ type Definition struct {
 
 func NewByEnvironment() Definition {
 
-	var con *mongodb.Connection
+	svc, err := getDynamoClient()
 
-	//
-	// Obtains the environment
-	//
-	if os.Getenv("GO_ENVIRONMENT") == "production" {
-		print("production")
-	} else if os.Getenv("GO_ENV") == "test" {
-		con = mongodb.New("mongodb://localhost:27017", "test")
-	} else {
+	if err != nil {
 		panic(errors.New("can't init application in development mode"))
+
 	}
 
-	return initDependencies(con)
+	return initDependencies(svc)
 }
 
-func initDependencies(con *mongodb.Connection) Definition {
+func initDependencies(svc *dynamodb.DynamoDB) Definition {
 
 	d := Definition{}
 
 	//
 	// Repositories
 	//
-	d.CollectorRepository = collector.New(con.Db.Collection("words"))
+	d.WordRepository = wordrepo.New(svc, "words")
 	d.YoutubeRepository = youtube.New()
 
 	//
 	// Core
 	//
-	d.CollectorService = collectorsrv.New(d.YoutubeRepository, d.CollectorRepository)
+	d.CollectorService = collectorsrv.New(d.YoutubeRepository, d.WordRepository)
+	d.FinderService = findersrv.New(d.WordRepository)
 
 	//
 	// Handlers
 	//
-	d.CollectorHandler = collectorhdl.New(d.CollectorService)
+	d.CollectorHandler = collectorhdl.New(d.CollectorService, d.FinderService)
 
 	return d
+}
+
+func getDynamoClient() (*dynamodb.DynamoDB, error) {
+
+	// Retrieve AWS region from environment variable or use a default value
+	region := os.Getenv("AWS_REGION")
+	if region == "" {
+		region = "us-east-1" // Replace with your default region
+	}
+
+	// Retrieve DynamoDB endpoint from environment variable or use a default value
+	dynamoDBEndpoint := os.Getenv("DYNAMODB_ENDPOINT")
+	if dynamoDBEndpoint == "" {
+		dynamoDBEndpoint = "http://localhost:8000" // Replace with your DynamoDB endpoint
+	}
+
+	// Create a new session using the AWS SDK for Go
+	sess, err := session.NewSession(&aws.Config{
+		Region: aws.String(region),
+	})
+
+	if err != nil {
+		log.Fatal("Error creating session:", err)
+		return nil, err
+	}
+
+	// Create a DynamoDB client
+	svc := dynamodb.New(sess)
+
+	return svc, nil
 }

@@ -11,12 +11,12 @@ import (
 
 type service struct {
 	ytldRepo            ports.YoutubeRepository
-	collectorRepository ports.CollectorRepository
+	collectorRepository ports.WordRepository
 }
 
 func New(
 	youtubeRepo ports.YoutubeRepository,
-	collectorRepository ports.CollectorRepository) ports.CollectorService {
+	collectorRepository ports.WordRepository) ports.CollectorService {
 	return &service{youtubeRepo, collectorRepository}
 }
 
@@ -39,8 +39,9 @@ func (srv *service) StoreSubtitlesByVideoId(videoId string) error {
 	words := extractWords(file, videoId)
 	defer file.Close()
 
+	//Put word in DynamoDb
 	for _, word := range words {
-		srv.collectorRepository.Save(word)
+		srv.collectorRepository.Put(word.Word, word.Sentence, word.Video.ID, word.Video.StartTime, word.Video.EndTime)
 	}
 
 	// Removes file
@@ -59,7 +60,7 @@ func extractWords(file *os.File, videoId string) []domain.Word {
 
 	for lector.Scan() {
 		linea := lector.Text()
-		if linea == "" || linea == "WEBVTT" || linea == "Kind: captions" || linea == "Language: en" || linea == "♪" {
+		if linea == "" || linea == "WEBVTT" || linea == "Kind: captions" || linea == "Language: en" || linea == "♪" || linea == "♪♪♪" {
 			continue
 		}
 

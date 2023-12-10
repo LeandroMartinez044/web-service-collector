@@ -4,20 +4,29 @@ import (
 	"testing"
 
 	"github.com/LeandroMartinez044/lmenglish/collector/internal/core/services/collectorsrv"
-	"github.com/LeandroMartinez044/lmenglish/collector/internal/repositories/collector"
-	"github.com/LeandroMartinez044/lmenglish/collector/internal/repositories/mongodb"
+	wordrepo "github.com/LeandroMartinez044/lmenglish/collector/internal/repositories/wordrepo"
 	"github.com/LeandroMartinez044/lmenglish/collector/internal/repositories/youtube"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
 )
 
 func TestGet(t *testing.T) {
 	repo := youtube.New()
-	con := mongodb.New("mongodb://localhost:27017", "test")
+	endpoint := "http://localhost:8000" // Specify DynamoDB Local endpoint
+	region := "us-east-1"               // Replace with your region
 
-	collectorRepository := collector.New(con.Db.Collection("words"))
-	srv := collectorsrv.New(repo, collectorRepository)
+	sess, _ := session.NewSession(&aws.Config{
+		Region:   aws.String(region),
+		Endpoint: aws.String(endpoint),
+	})
+
+	svc := dynamodb.New(sess)
+
+	wordRepository := wordrepo.New(svc, "words")
+	srv := collectorsrv.New(repo, wordRepository)
 
 	//srv.ytldRepo.SaveSubtitules("https://www.youtube.com/watch?v=5NPBIwQyPWE")
 	id := "https://www.youtube.com/watch?v=fFRl9sacyEQ"
-	err := srv.StoreSubtitlesByVideoId(id)
-	print(err)
+	srv.StoreSubtitlesByVideoId(id)
 }
