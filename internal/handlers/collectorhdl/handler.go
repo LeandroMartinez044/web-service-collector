@@ -51,6 +51,7 @@ type VideoDto struct {
 func (h *Handler) GetVideosByWord(c *gin.Context) {
 
 	// Get the ID parameter from the URL
+
 	word := c.Param("word")
 
 	videos, err := h.finderSrv.FindVideosBy(word)
@@ -67,4 +68,9 @@ func (h *Handler) GetVideosByWord(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, videoDtoList)
+}
+
+func (h *Handler) Check(c *gin.Context) {
+
+	c.JSON(http.StatusOK, "Hello world")
 }

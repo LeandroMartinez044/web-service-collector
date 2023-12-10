@@ -11,5 +11,6 @@ func main() {
 	router := gin.Default()
 	router.POST("/generate", d.CollectorHandler.GenerateSubtitles)
 	router.GET("/videos/:word", d.CollectorHandler.GetVideosByWord)
-	router.Run("localhost:8080")
+	router.GET("/check", d.CollectorHandler.Check)
+	router.Run()
 }
