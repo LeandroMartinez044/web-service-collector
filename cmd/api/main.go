@@ -15,6 +15,6 @@ func main() {
 	router.GET("/videos/:word", d.CollectorHandler.GetVideosByWord)
 	router.GET("/check", d.CollectorHandler.Check)
 
-	http.ListenAndServe(":8080", router)
+	http.ListenAndServe(":8080", nil)
 
 }
