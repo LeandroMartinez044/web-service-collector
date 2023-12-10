@@ -15,6 +15,11 @@ func main() {
 	router.GET("/videos/:word", d.CollectorHandler.GetVideosByWord)
 	router.GET("/check", d.CollectorHandler.Check)
 
-	http.ListenAndServe(":8080", router)
+	http.HandleFunc("/", hello)
+	http.ListenAndServe(":8080", nil)
 
+}
+
+func hello(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("hello"))
 }
