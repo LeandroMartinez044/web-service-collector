@@ -90,6 +90,7 @@ func getDynamoClient() (*dynamodb.DynamoDB, error) {
 
 	}
 
+	print(os.Getenv("GO_ENV"))
 	// Retrieve AWS region from environment variable or use a default value
 	if os.Getenv("GO_ENV") == "prod" {
 		// Create a new session using the AWS SDK for Go
