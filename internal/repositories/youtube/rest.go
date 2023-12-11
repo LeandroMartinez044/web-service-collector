@@ -24,8 +24,14 @@ func (repo *repository) GenerateSubtitlesFile(videoId string) error {
 	commandParams := " --write-auto-sub --skip-download --sub-lang en -o " + filename + " -- " + videoId
 	commandName := "youtube-dl"
 	command := commandName + " " + commandParams
-	cmd := exec.Command("/usr/local/bin/youtube-dl", "-c", command)
-	err := cmd.Run() // waits until the commands runs and finishes
+	youtubeDLPath, err := exec.LookPath("youtube-dl")
+	if err != nil {
+		return fmt.Errorf(err.Error())
+	}
+	cmd := exec.Command(youtubeDLPath, "-c", command)
+	output, err := cmd.CombinedOutput() // waits until the commands runs and finishes
+
+	print(output)
 
 	if err != nil {
 		return fmt.Errorf(err.Error())
