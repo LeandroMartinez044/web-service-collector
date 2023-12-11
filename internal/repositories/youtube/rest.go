@@ -21,7 +21,7 @@ func (repo *repository) GenerateSubtitlesFile(videoId string) error {
 	err := repo.ytdl.DownloadVideo(videoId)
 
 	if err != nil {
-		return err
+		return fmt.Errorf(err.Error())
 	}
 
 	return nil

@@ -33,7 +33,7 @@ func (srv *service) StoreSubtitlesByVideoId(videoId string) error {
 
 	if err != nil {
 		logger.Info(err)
-		return fmt.Errorf("error en generar subitulos %d", err)
+		return fmt.Errorf(err.Error())
 	}
 
 	// Get file that it will be to read it.
