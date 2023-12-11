@@ -40,9 +40,10 @@ func (srv *service) StoreSubtitlesByVideoId(videoId string) error {
 	defer file.Close()
 
 	//Put word in DynamoDb
-	for _, word := range words {
-		srv.collectorRepository.Put(word.Word, word.Sentence, word.Video.ID, word.Video.StartTime, word.Video.EndTime)
-	}
+	//for _, word := range words {
+	word := words[5]
+	srv.collectorRepository.Put(word.Word, word.Sentence, word.Video.ID, word.Video.StartTime, word.Video.EndTime)
+	//}
 
 	// Removes file
 	srv.ytldRepo.RemoveFile(videoId)
@@ -77,6 +78,9 @@ func extractWords(file *os.File, videoId string) []domain.Word {
 
 		// Utilizar strings.Replace para eliminar el símbolo
 		linea = strings.Replace(linea, "-", "", -1)
+
+		// Utilizar strings.Replace para eliminar el símbolo
+		linea = strings.Replace(linea, "!", "", -1)
 
 		// Utilizar strings.Replace para eliminar el símbolo
 		linea = strings.Replace(linea, ".", "", -1)

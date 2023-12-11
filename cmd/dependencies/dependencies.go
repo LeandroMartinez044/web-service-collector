@@ -74,25 +74,35 @@ func initDependencies(svc *dynamodb.DynamoDB) Definition {
 
 func getDynamoClient() (*dynamodb.DynamoDB, error) {
 
+	var sess *session.Session
+	var err error
+	region := "us-east-1"
+
 	// Retrieve AWS region from environment variable or use a default value
-	region := os.Getenv("AWS_REGION")
-	if region == "" {
-		region = "us-east-1" // Replace with your default region
+	if os.Getenv("GO_ENV") == "test" {
+		//
+		dynamoDBEndpoint := "http://localhost:8080"
+		// Create a new session using the AWS SDK for Go
+		sess, err = session.NewSession(&aws.Config{
+			Region:   aws.String(region),
+			Endpoint: aws.String(dynamoDBEndpoint),
+		})
+
 	}
 
-	// Retrieve DynamoDB endpoint from environment variable or use a default value
-	dynamoDBEndpoint := os.Getenv("DYNAMODB_ENDPOINT")
-	if dynamoDBEndpoint == "" {
-		dynamoDBEndpoint = "http://localhost:8000" // Replace with your DynamoDB endpoint
+	// Retrieve AWS region from environment variable or use a default value
+	if os.Getenv("GO_ENV") == "prod" {
+		// Create a new session using the AWS SDK for Go
+		sess, err = session.NewSession(&aws.Config{
+			Region: aws.String(region),
+		})
+		if err != nil {
+			log.Fatal("Error creating session:", err)
+			return nil, err
+		}
 	}
-
-	// Create a new session using the AWS SDK for Go
-	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String(region),
-	})
 
 	if err != nil {
-		log.Fatal("Error creating session:", err)
 		return nil, err
 	}
 
