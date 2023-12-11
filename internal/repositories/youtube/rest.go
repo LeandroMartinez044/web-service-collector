@@ -30,7 +30,7 @@ func (repo *repository) GenerateSubtitlesFile(videoId string) error {
 
 	//filename := buildDirectoryPath() + "/" + "%(title)s.%(ext)s"
 
-	cmd := exec.Command("/usr/local/bin/youtube-dl", "--write-sub", "--sub-lang", "en", "--skip-download", "-o", outputDirectory+"/"+videoURL+".%(ext)s", videoURL)
+	cmd := exec.Command("/bin/bash", "youtube-dl --write-sub", "--sub-lang", "en", "--skip-download", "-o", outputDirectory+"/"+videoURL+".%(ext)s", videoURL)
 
 	// Run the command
 	_, err := cmd.CombinedOutput()
