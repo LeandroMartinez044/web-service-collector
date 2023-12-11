@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 )
 
@@ -18,7 +19,13 @@ func (repo *repository) GenerateSubtitlesFile(videoId string) error {
 		err := errors.New("videoId cannot be nil")
 		return err
 	}
-	err := repo.ytdl.DownloadVideo(videoId)
+
+	filename := "\"" + buildDirectoryPath() + "/" + videoId + ".srt\""
+	commandParams := " --write-auto-sub --skip-download --sub-lang en -o " + filename + " -- " + videoId
+	commandName := "youtube-dl"
+	command := commandName + " " + commandParams
+	cmd := exec.Command("/usr/local/bin/youtube-dl", "-c", command)
+	err := cmd.Run() // waits until the commands runs and finishes
 
 	if err != nil {
 		return fmt.Errorf(err.Error())
@@ -95,5 +102,5 @@ func buildDirectoryPath() string {
 		fmt.Println("Error getting currect directory:", err)
 	}
 	elementos := strings.Split(directory, "web-service-collector")
-	return elementos[0] + "/web-service-collector/resources"
+	return elementos[0] + "web-service-collector/resources"
 }
