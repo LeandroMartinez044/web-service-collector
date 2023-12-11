@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/aws/aws-sdk-go v1.47.0
 	github.com/gin-gonic/gin v1.9.1
+	github.com/sirupsen/logrus v1.9.3
 	github.com/youtube-videos/go-youtube-dl v0.0.0-20170720135957-9ca8bafc4268
 )
 

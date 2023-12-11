@@ -7,6 +7,7 @@ import (
 
 	"github.com/LeandroMartinez044/lmenglish/collector/internal/core/domain"
 	"github.com/LeandroMartinez044/lmenglish/collector/internal/core/ports"
+	"github.com/sirupsen/logrus"
 )
 
 type service struct {
@@ -23,15 +24,21 @@ func New(
 // videoId: generate subtitle URL
 func (srv *service) StoreSubtitlesByVideoId(videoId string) error {
 
+	// Create a new instance of logrus logger
+	logger := logrus.New()
+
 	// Generate youtube's subtitles by videoId and store it
 	err := srv.ytldRepo.GenerateSubtitlesFile(videoId)
+
 	if err != nil {
+		logger.Info(err)
 		return err
 	}
 
 	// Get file that it will be to read it.
 	file, err := srv.ytldRepo.GetFile(videoId)
 	if err != nil {
+		logger.Info(err)
 		return err
 	}
 
