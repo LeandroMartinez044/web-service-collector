@@ -36,11 +36,11 @@ func (repo *repository) GenerateSubtitlesFile(videoId string) error {
 	cmd := exec.Command(youtubeDLPath, "--write-sub", "--sub-lang", "en", "--skip-download", "-o", outputDirectory+"/"+videoURL+".%(ext)s", videoURL)
 
 	// Run the command
-	output, err := cmd.CombinedOutput()
+	_, err := cmd.CombinedOutput()
 
 	if err != nil {
 		fmt.Println("Error:", err)
-		return fmt.Errorf("error downloading subtitles: %s", output)
+		return fmt.Errorf("error downloading subtitles: %s", err)
 	}
 
 	fmt.Println("Subtitles downloaded successfully.")
