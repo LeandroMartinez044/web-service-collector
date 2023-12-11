@@ -20,24 +20,29 @@ func (repo *repository) GenerateSubtitlesFile(videoId string) error {
 		return err
 	}
 
-	filename := "\"" + buildDirectoryPath() + "/" + videoId + ".srt\""
-	commandParams := " --write-auto-sub --skip-download --sub-lang en -o " + filename + " -- " + videoId
-	commandName := "youtube-dl"
-	command := commandName + " " + commandParams
-	youtubeDLPath, err := exec.LookPath("youtube-dl")
-	if err != nil {
-		return fmt.Errorf(err.Error())
-	}
-	cmd := exec.Command(youtubeDLPath, "-c", command)
-	output, err := cmd.CombinedOutput() // waits until the commands runs and finishes
+	videoURL := videoId
+	outputDirectory := buildDirectoryPath()
 
-	print(output)
-
-	if err != nil {
-		return fmt.Errorf(err.Error())
+	// Ensure the output directory exists
+	if _, err := os.Stat(outputDirectory); os.IsNotExist(err) {
+		os.MkdirAll(outputDirectory, os.ModePerm)
 	}
 
+	//filename := buildDirectoryPath() + "/" + "%(title)s.%(ext)s"
+
+	cmd := exec.Command("youtube-dl", "--write-sub", "--sub-lang", "en", "--skip-download", "-o", outputDirectory+"/"+videoURL+".%(ext)s", videoURL)
+
+	// Run the command
+	output, err := cmd.CombinedOutput()
+
+	if err != nil {
+		fmt.Println("Error:", err)
+		return fmt.Errorf("error downloading subtitles: %s", output)
+	}
+
+	fmt.Println("Subtitles downloaded successfully.")
 	return nil
+
 }
 
 // GetFileL: get file with subtitles by videoId.
