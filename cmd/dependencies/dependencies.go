@@ -90,19 +90,22 @@ func getDynamoClient() (*dynamodb.DynamoDB, error) {
 
 	}
 
-	print(os.Getenv("GO_ENV"))
-	// Retrieve AWS region from environment variable or use a default value
-	if os.Getenv("GO_ENV") == "prod" {
-		// Create a new session using the AWS SDK for Go
-		sess, err = session.NewSession(&aws.Config{
-			Region: aws.String(region),
-		})
-		if err != nil {
-			log.Fatal("Error creating session:", err)
-			return nil, err
-		}
+	sess, err = session.NewSession(&aws.Config{
+		Region: aws.String(region),
+	})
+	if err != nil {
+		log.Fatal("Error creating session:", err)
+		return nil, err
 	}
 
+	/*
+		print(os.Getenv("GO_ENV"))
+		// Retrieve AWS region from environment variable or use a default value
+		if os.Getenv("GO_ENV") == "prod" {
+			// Create a new session using the AWS SDK for Go
+
+		}
+	*/
 	if err != nil {
 		return nil, err
 	}
