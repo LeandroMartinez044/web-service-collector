@@ -2,6 +2,7 @@ package collectorsrv
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"strings"
 
@@ -32,14 +33,14 @@ func (srv *service) StoreSubtitlesByVideoId(videoId string) error {
 
 	if err != nil {
 		logger.Info(err)
-		return err
+		return fmt.Errorf("error en generar subitulos %d", err)
 	}
 
 	// Get file that it will be to read it.
 	file, err := srv.ytldRepo.GetFile(videoId)
 	if err != nil {
 		logger.Info(err)
-		return err
+		return fmt.Errorf("error obtener subitutlo %d", err)
 	}
 
 	// Creates slice with the words of the file.
