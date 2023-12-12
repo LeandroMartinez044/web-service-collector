@@ -23,6 +23,18 @@ func (repo *repository) GenerateSubtitlesFile(videoId string) error {
 
 	videoURL := videoId
 
+	// Replace "youtube-dl" with the command you're looking for
+	commandName := "youtube-dl"
+
+	// Look for the path of the command
+	path, err := exec.LookPath(commandName)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	os.Setenv(path, "/path/to/youtube-dl:"+os.Getenv(path))
+
 	// Command to run youtube-dl to download subtitles
 	cmd := exec.Command("youtube-dl", "--skip-download", "--write-sub", "--sub-lang", "en", "-o "+videoURL, videoURL)
 
@@ -31,7 +43,7 @@ func (repo *repository) GenerateSubtitlesFile(videoId string) error {
 	cmd.Stderr = os.Stderr
 
 	// Run the command
-	err := cmd.Run()
+	err = cmd.Run()
 	if err != nil {
 		log.Fatal(err)
 	}
