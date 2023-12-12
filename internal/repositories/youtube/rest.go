@@ -3,6 +3,7 @@ package youtube
 import (
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"strings"
@@ -21,23 +22,18 @@ func (repo *repository) GenerateSubtitlesFile(videoId string) error {
 	}
 
 	videoURL := videoId
-	outputDirectory := buildDirectoryPath()
 
-	// Ensure the output directory exists
-	if _, err := os.Stat(outputDirectory); os.IsNotExist(err) {
-		os.MkdirAll(outputDirectory, os.ModePerm)
-	}
+	// Command to run youtube-dl to download subtitles
+	cmd := exec.Command("youtube-dl", "--skip-download", "--write-sub", "--sub-lang", "en", "-o "+videoURL, videoURL)
 
-	//filename := buildDirectoryPath() + "/" + "%(title)s.%(ext)s"
-
-	cmd := exec.Command("/bin/bash", "youtube-dl --write-sub", "--sub-lang", "en", "--skip-download", "-o", outputDirectory+"/"+videoURL+".%(ext)s", videoURL)
+	// Set output to os.Stdout to see the download progress
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 
 	// Run the command
-	_, err := cmd.CombinedOutput()
-
+	err := cmd.Run()
 	if err != nil {
-		fmt.Println("Error:", err)
-		return fmt.Errorf("error downloading subtitles: %s", err)
+		log.Fatal(err)
 	}
 
 	fmt.Println("Subtitles downloaded successfully.")
