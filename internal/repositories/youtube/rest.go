@@ -21,6 +21,8 @@ func (repo *repository) GenerateSubtitlesFile(videoId string) error {
 		return err
 	}
 
+	os.Setenv("PATH", "/usr/local/bin:"+os.Getenv("PATH"))
+
 	videoURL := videoId
 
 	// Command to run youtube-dl to download subtitles
