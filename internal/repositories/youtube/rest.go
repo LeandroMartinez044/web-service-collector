@@ -21,6 +21,9 @@ func (repo *repository) GenerateSubtitlesFile(videoId string) error {
 		return err
 	}
 
+	path := os.Getenv("PATH")
+	fmt.Println("PATH:", path)
+
 	// Update the PATH environment variable
 	os.Setenv("PATH", "/usr/local/bin:"+os.Getenv("PATH"))
 
