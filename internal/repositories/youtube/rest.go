@@ -24,9 +24,6 @@ func (repo *repository) GenerateSubtitlesFile(videoId string) error {
 	path := os.Getenv("PATH")
 	fmt.Println("PATH:", path)
 
-	// Update the PATH environment variable
-	os.Setenv("PATH", "/usr/local/bin:"+os.Getenv("PATH"))
-
 	videoURL := videoId
 
 	/*
@@ -36,7 +33,7 @@ func (repo *repository) GenerateSubtitlesFile(videoId string) error {
 	*/
 
 	//Command to run youtube-dl to download subtitles
-	cmd := exec.Command("/usr/local/bin/youtube-dl", "--skip-download", "--write-sub", "--sub-lang", "en", "-o "+videoURL, videoURL)
+	cmd := exec.Command("youtube-dl", "--skip-download", "--write-sub", "--sub-lang", "en", "-o "+videoURL, videoURL)
 
 	// Set output to os.Stdout to see the download progress
 	cmd.Stdout = os.Stdout
