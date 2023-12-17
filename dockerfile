@@ -1,29 +1,24 @@
 # Use an official Golang runtime as a base image
-FROM golang:1.16 AS builder
+FROM golang:1.21
 
 # Set the working directory inside the container
-WORKDIR /go/src/web-service-collector
+WORKDIR ./cmd/api/
 
-# Copy everything from the current directory to the PWD (Present Working Directory) inside the container
+# Copy the local package files to the container's workspace
 COPY . .
 
-# Download and install any required dependencies
-RUN go get -d -v ./...
+# Build the application
+RUN go build -o web-service-collector ./cmd/api
 
-# Install the application
-RUN go install -v ./...
-
-# Use a smaller base image for the final image
+# Use a smaller Alpine Linux image for the final image
 FROM alpine:latest
 
-# Install necessary dependencies
+# Install necessary dependencies (including Python and youtube-dl)
 RUN apk --no-cache add \
     ca-certificates \
     ffmpeg \
-    python3
-
-# Install pip
-RUN apk add --update py3-pip
+    python3 \
+    py3-pip
 
 # Upgrade pip
 RUN pip3 install --upgrade pip
@@ -31,18 +26,11 @@ RUN pip3 install --upgrade pip
 # Install youtube-dl using pip
 RUN pip3 install --upgrade youtube-dl
 
-# Copy the built executable from the previous stage
-COPY --from=builder /go/bin/web-service-collector /usr/local/bin/web-service-collector
+# Copy the built Golang executable from the previous stage
+COPY --from=0 /go/src/app/cmd/api/web-service-collector /usr/local/bin/web-service-collector
 
-# Set the PORT environment variable
-ENV PORT 8080
-
-# Expose the application's port
+# Expose port 8080 to the outside world
 EXPOSE 8080
 
 # Command to run the executable
 CMD ["./web-service-collector"]
-
-
-
-
