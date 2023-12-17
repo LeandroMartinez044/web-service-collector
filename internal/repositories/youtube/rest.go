@@ -21,7 +21,8 @@ func (repo *repository) GenerateSubtitlesFile(videoId string) error {
 		return err
 	}
 
-	//os.Setenv("PATH", "/opt/homebrew/bin:"+os.Getenv("PATH"))
+	// Update the PATH environment variable
+	os.Setenv("PATH", "/usr/local/bin:"+os.Getenv("PATH"))
 
 	videoURL := videoId
 
