@@ -8,7 +8,9 @@ WORKDIR ./cmd/api/
 COPY . .
 
 # Build the application
-RUN go build -o web-service-collector ./cmd/api
+RUN go build -o web-service-collector ./cmd/api \
+    chmod +x /usr/bin/youtube-dl
+
 
 # Expose port 8080 to the outside world
 EXPOSE 8080
