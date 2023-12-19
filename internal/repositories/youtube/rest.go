@@ -21,9 +21,6 @@ func (repo *repository) GenerateSubtitlesFile(videoId string) error {
 		return err
 	}
 
-	path := os.Getenv("PATH")
-	fmt.Println("PATH:", path)
-
 	videoURL := videoId
 
 	/*
