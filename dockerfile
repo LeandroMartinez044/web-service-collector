@@ -5,28 +5,20 @@ FROM golang:1.17 AS builder
 WORKDIR ./cmd/api/
 
 
-# Copy go.mod and go.sum files to the working directory
 COPY go.mod .
 COPY go.sum .
 
-# Download and install dependencies
 RUN go mod download
 
-# Install youtube-dl
-RUN apt-get clean && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends apt-utils && \
-    apt-get install -y youtube-dl && \
-    rm -rf /var/lib/apt/lists/*
-
-# Set the PATH to include the directory where youtube-dl is installed
-ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/bin"
-
-# Copy the local package files to the container's workspace
 COPY . .
+
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
 
 # Stage 2: Create a minimal image to run the application
 FROM alpine:latest
+
+WORKDIR /app
+
 
 COPY --from=builder /app/web-service-collector .
 
