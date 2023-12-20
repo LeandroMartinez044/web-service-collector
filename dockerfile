@@ -25,8 +25,13 @@ ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/bin
 # Copy the local package files to the container's workspace
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o web-service-collector ./cmd/api
-
+# Install CA certificates and Go
+RUN apk --no-cache add ca-certificates && \
+    apk --no-cache add --virtual build-dependencies curl && \
+    curl -LO https://golang.org/dl/go1.17.3.linux-amd64.tar.gz && \
+    tar -C /usr/local -xzf go1.17.3.linux-amd64.tar.gz && \
+    rm go1.17.3.linux-amd64.tar.gz && \
+    apk del build-dependencies
 # Stage 2: Create a minimal image to run the application
 FROM alpine:latest
 
