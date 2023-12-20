@@ -4,13 +4,17 @@ FROM golang:1.21
 # Set the working directory inside the container
 WORKDIR ./cmd/api/
 
-# Copy the local package files to the container's workspace
-COPY . .
 
 # Install youtube-dl
 RUN apt-get update && \
     apt-get install -y youtube-dl && \
     rm -rf /var/lib/apt/lists/*
+
+# Set the PATH to include the directory where youtube-dl is installed
+ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/bin"
+
+# Copy the local package files to the container's workspace
+COPY . .
 
 # Build the application
 RUN go build -o web-service-collector ./cmd/api
