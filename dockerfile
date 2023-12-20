@@ -5,6 +5,13 @@ FROM golang:1.21
 WORKDIR ./cmd/api/
 
 
+# Copy go.mod and go.sum files to the working directory
+COPY go.mod .
+COPY go.sum .
+
+# Download and install dependencies
+RUN go mod download
+
 # Install youtube-dl
 RUN apt-get update && \
     apt-get install -y youtube-dl && \
