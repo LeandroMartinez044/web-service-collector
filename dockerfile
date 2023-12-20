@@ -23,7 +23,7 @@ RUN apk --no-cache add youtube-dl
 ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/bin"
 
 # Build the application
-RUN go build -o app .
+RUN go build -o web-service-collector ./cmd/api .
 
 # Expose port 8080 to the outside world
 EXPOSE 8080
