@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM golang:1.21 AS builder
+FROM golang:1.17 AS builder
 
 # Set the working directory inside the container
 WORKDIR ./cmd/api/
