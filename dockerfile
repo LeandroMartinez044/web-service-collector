@@ -13,7 +13,9 @@ COPY go.sum .
 RUN go mod download
 
 # Install youtube-dl
-RUN apt-get update && \
+RUN apt-get clean && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends apt-utils && \
     apt-get install -y youtube-dl && \
     rm -rf /var/lib/apt/lists/*
 
