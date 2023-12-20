@@ -1,5 +1,5 @@
-# Use an official Golang runtime as a base image
-FROM golang:1.21
+# Stage 1: Build the application
+FROM golang:1.21 AS builder
 
 # Set the working directory inside the container
 WORKDIR ./cmd/api/
@@ -25,8 +25,12 @@ ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/bin
 # Copy the local package files to the container's workspace
 COPY . .
 
-# Build the application
-RUN go build -o web-service-collector ./cmd/api
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o web-service-collector ./cmd/api
+
+# Stage 2: Create a minimal image to run the application
+FROM alpine:latest
+
+COPY --from=builder /app/web-service-collector .
 
 # Expose port 8080 to the outside world
 EXPOSE 8080
