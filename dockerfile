@@ -36,8 +36,8 @@ RUN curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o 
     chmod a+rx /usr/local/bin/youtube-dl
 
 # Set environment variables
-ENV AWS_ACCESS_KEY_ID=AKIA52OA23R64E64CNV7
-ENV AWS_SECRET_ACCESS_KEY=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
+ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+ENV AWS_SECRET_ACCESS_KEY=${SECRET_ACCESS_KEY}
 ENV AWS_DEFAULT_REGION=us-east-1
 
 # Expose port 8080 to the outside world
