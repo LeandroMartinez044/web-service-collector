@@ -1,8 +1,12 @@
 # Use an official Golang runtime as a base image
 FROM golang:1.20 AS builder
 
+# Set environment variables
+ENV GO_ENV=${ENVIROMENT}
+
 # Set the working directory inside the container
 WORKDIR /web-service-collector
+
 
 # Copy go.mod and go.sum files to download dependencies
 COPY go.mod go.sum ./

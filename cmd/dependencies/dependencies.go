@@ -92,10 +92,12 @@ func getDynamoClient() (*dynamodb.DynamoDB, error) {
 
 	}
 
-	_ = os.Setenv("AWS_SDK_LOAD_CONFIG", "1")
+	key := os.Getenv("AWS_ACCESS_KEY_ID")
+	secret := os.Getenv("SECRET_ACCESS_KEY")
+
 	sess, err = session.NewSession(&aws.Config{
 		Region:      aws.String(region),
-		Credentials: credentials.NewStaticCredentials("AKIA52OA23R64E64CNV7", "eEcMMf6zkY8a6zdsji3iWcUw/N9DR7trMHjTjf+N", ""),
+		Credentials: credentials.NewStaticCredentials(key, secret, ""),
 	})
 
 	if err != nil {
