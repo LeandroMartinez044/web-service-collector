@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/LeandroMartinez044/lmenglish/collector/cmd/dependencies"
+	"github.com/LeandroMartinez044/web-service-collector/cmd/dependencies"
 	"github.com/gin-gonic/gin"
 )
 

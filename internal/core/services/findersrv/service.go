@@ -1,8 +1,8 @@
 package findersrv
 
 import (
-	"github.com/LeandroMartinez044/lmenglish/collector/internal/core/domain"
-	"github.com/LeandroMartinez044/lmenglish/collector/internal/core/ports"
+	"github.com/LeandroMartinez044/web-service-collector/internal/core/domain"
+	"github.com/LeandroMartinez044/web-service-collector/internal/core/ports"
 )
 
 type service struct {

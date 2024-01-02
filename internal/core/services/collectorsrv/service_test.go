@@ -3,9 +3,10 @@ package collectorsrv_test
 import (
 	"testing"
 
-	"github.com/LeandroMartinez044/lmenglish/collector/internal/core/services/collectorsrv"
-	wordrepo "github.com/LeandroMartinez044/lmenglish/collector/internal/repositories/wordrepo"
-	"github.com/LeandroMartinez044/lmenglish/collector/internal/repositories/youtube"
+	"github.com/LeandroMartinez044/web-service-collector/internal/core/services/collectorsrv"
+	wordrepo "github.com/LeandroMartinez044/web-service-collector/internal/repositories/wordrepo"
+	"github.com/LeandroMartinez044/web-service-collector/internal/repositories/youtube"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"

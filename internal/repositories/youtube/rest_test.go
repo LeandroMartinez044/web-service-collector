@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/LeandroMartinez044/lmenglish/collector/internal/core/ports"
+	"github.com/LeandroMartinez044/web-service-collector/internal/core/ports"
 )
 
 var youtubeRepo ports.YoutubeRepository

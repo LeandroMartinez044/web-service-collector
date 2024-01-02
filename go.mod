@@ -1,4 +1,4 @@
-module github.com/LeandroMartinez044/lmenglish/collector
+module github.com/LeandroMartinez044/web-service-collector
 
 go 1.21
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/LeandroMartinez044/lmenglish/collector/internal/core/ports"
+	"github.com/LeandroMartinez044/web-service-collector/internal/core/ports"
 	"github.com/gin-gonic/gin"
 )
 

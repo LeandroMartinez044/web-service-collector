@@ -21,30 +21,22 @@ func (repo *repository) GenerateSubtitlesFile(videoId string) error {
 		return err
 	}
 
-	videoURL := videoId
+	key := strings.Split(videoId, "/watch?v=")[1]
 
-	/*
-		if err != nil {
-			log.Fatal(err)
-		}
-	*/
+	filename := repo.ytdl.Path + key + ".srt"
 
-	//Command to run youtube-dl to download subtitles
-	cmd := exec.Command("youtube-dl", "--skip-download", "--write-sub", "--sub-lang", "en", "-o "+videoURL, videoURL)
+	// Run youtube-dl command to download subtitles
+	cmd := exec.Command("youtube-dl", "--skip-download", "--write-sub", "--sub-lang", "en", "-o", filename, videoId)
 
-	// Set output to os.Stdout to see the download progress
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
-	// Run the command
+	// Run the command and get the output
 	err := cmd.Run()
+
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("%v", err)
 	}
 
 	fmt.Println("Subtitles downloaded successfully.")
 	return nil
-
 }
 
 // GetFileL: get file with subtitles by videoId.
@@ -56,10 +48,7 @@ func (repo *repository) GetFile(videoId string) (*os.File, error) {
 		return nil, errors.New("videoId cannot be empty")
 	}
 
-	fileLocation, err := repo.GetFileLocation(videoId)
-	if err != nil {
-		return nil, err
-	}
+	fileLocation := repo.ytdl.Path + videoId + ".srt.en.vtt"
 
 	// Intenta abrir el archivo en modo lectura
 	file, err := os.Open(fileLocation)
@@ -103,17 +92,13 @@ func (repo *repository) GetFileLocation(videoId string) (string, error) {
 		err := errors.New("videoId cannot be nil")
 		return "", err
 	}
-	return repo.ytdl.Path + "/" + videoId + ".srt.en.vtt", nil
+	return repo.ytdl.Path + videoId + ".srt.en.vtt", nil
 }
 
 // buildDirectoryPath: builds the path for saving the subtitles.
 //
 // return directory path file. cannot be empty.
 func buildDirectoryPath() string {
-	directory, err := os.Getwd()
-	if err != nil {
-		fmt.Println("Error getting currect directory:", err)
-	}
-	elementos := strings.Split(directory, "web-service-collector")
-	return elementos[0] + "web-service-collector/resources"
+	fileLocation := os.Getenv("GOPATH") + "/web-service-collector/resources/"
+	return fileLocation
 }

@@ -1,6 +1,6 @@
 package ports
 
-import "github.com/LeandroMartinez044/lmenglish/collector/internal/core/domain"
+import "github.com/LeandroMartinez044/web-service-collector/internal/core/domain"
 
 type CollectorService interface {
 	StoreSubtitlesByVideoId(videoId string) error

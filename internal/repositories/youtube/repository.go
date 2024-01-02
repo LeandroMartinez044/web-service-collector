@@ -1,7 +1,7 @@
 package youtube
 
 import (
-	"github.com/LeandroMartinez044/lmenglish/collector/internal/core/ports"
+	"github.com/LeandroMartinez044/web-service-collector/internal/core/ports"
 	youtube_dl "github.com/youtube-videos/go-youtube-dl"
 )
 

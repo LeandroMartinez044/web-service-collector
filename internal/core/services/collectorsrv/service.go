@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/LeandroMartinez044/lmenglish/collector/internal/core/domain"
-	"github.com/LeandroMartinez044/lmenglish/collector/internal/core/ports"
+	"github.com/LeandroMartinez044/web-service-collector/internal/core/domain"
+	"github.com/LeandroMartinez044/web-service-collector/internal/core/ports"
 	"github.com/sirupsen/logrus"
 )
 
@@ -36,8 +36,10 @@ func (srv *service) StoreSubtitlesByVideoId(videoId string) error {
 		return fmt.Errorf(err.Error())
 	}
 
+	key := strings.Split(videoId, "/watch?v=")[1]
+
 	// Get file that it will be to read it.
-	file, err := srv.ytldRepo.GetFile(videoId)
+	file, err := srv.ytldRepo.GetFile(key)
 	if err != nil {
 		logger.Info(err)
 		return fmt.Errorf("error obtener subitutlo %d", err)
@@ -54,7 +56,7 @@ func (srv *service) StoreSubtitlesByVideoId(videoId string) error {
 	//}
 
 	// Removes file
-	srv.ytldRepo.RemoveFile(videoId)
+	srv.ytldRepo.RemoveFile(key)
 
 	return nil
 }

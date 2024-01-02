@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/LeandroMartinez044/lmenglish/collector/internal/core/domain"
+	"github.com/LeandroMartinez044/web-service-collector/internal/core/domain"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 )
