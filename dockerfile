@@ -2,7 +2,8 @@
 FROM golang:1.20 AS builder
 
 # Set environment variables
-ENV GO_ENV=${ENVIROMENT}
+ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+ENV SECRET_ACCESS_KEY=${SECRET_ACCESS_KEY}
 
 # Set the working directory inside the container
 WORKDIR /web-service-collector
