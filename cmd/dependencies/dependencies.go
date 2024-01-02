@@ -91,9 +91,11 @@ func getDynamoClient() (*dynamodb.DynamoDB, error) {
 
 	}
 
+	_ = os.Setenv("AWS_SDK_LOAD_CONFIG", "1")
 	sess, err = session.NewSession(&aws.Config{
 		Region: aws.String(region),
 	})
+
 	if err != nil {
 		log.Fatal("Error creating session:", err)
 		return nil, err
