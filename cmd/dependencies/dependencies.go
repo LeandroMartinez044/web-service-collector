@@ -93,7 +93,7 @@ func getDynamoClient() (*dynamodb.DynamoDB, error) {
 	}
 
 	key := os.Getenv("AWS_ACCESS_KEY_ID")
-	secret := os.Getenv("AWS_SECRET_ACCESS_KEY")
+	secret := os.Getenv("SECRET_ACCESS_KEY")
 
 	sess, err = session.NewSession(&aws.Config{
 		Region:      aws.String(region),
