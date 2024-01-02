@@ -1,10 +1,6 @@
 # Use an official Golang runtime as a base image
 FROM golang:1.20 AS builder
 
-# Set environment variables
-ENV AWS_ACCESS_KEY_ID=AKIA52OA23R64E64CNV7
-ENV AWS_SECRET_ACCESS_KEY=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
-ENV AWS_DEFAULT_REGION=us-east-1
 
 # Set the working directory inside the container
 WORKDIR /web-service-collector
@@ -25,6 +21,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o web-service-collector ./cmd/api
 # Stage 2: Create a minimal image to run the application
 FROM alpine:latest
 
+
 # Set the working directory inside the container
 WORKDIR /web-service-collector
 
@@ -37,6 +34,11 @@ RUN apk --no-cache add curl python3
 # Install youtube-dl
 RUN curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/youtube-dl && \
     chmod a+rx /usr/local/bin/youtube-dl
+
+# Set environment variables
+ENV AWS_ACCESS_KEY_ID=AKIA52OA23R64E64CNV7
+ENV AWS_SECRET_ACCESS_KEY=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
+ENV AWS_DEFAULT_REGION=us-east-1
 
 # Expose port 8080 to the outside world
 EXPOSE 8080
