@@ -13,6 +13,7 @@ import (
 	"github.com/LeandroMartinez044/web-service-collector/internal/repositories/youtube"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 )
@@ -93,7 +94,8 @@ func getDynamoClient() (*dynamodb.DynamoDB, error) {
 
 	_ = os.Setenv("AWS_SDK_LOAD_CONFIG", "1")
 	sess, err = session.NewSession(&aws.Config{
-		Region: aws.String(region),
+		Region:      aws.String(region),
+		Credentials: credentials.NewStaticCredentials("AKIA52OA23R64E64CNV7", "eEcMMf6zkY8a6zdsji3iWcUw/N9DR7trMHjTjf+N", ""),
 	})
 
 	if err != nil {
