@@ -78,7 +78,7 @@ func getDynamoClient() (*dynamodb.DynamoDB, error) {
 
 	var sess *session.Session
 	var err error
-	region := "us-east-1"
+	region := "us-east-2"
 
 	// Retrieve AWS region from environment variable or use a default value
 	if os.Getenv("GO_ENV") == "test" {
