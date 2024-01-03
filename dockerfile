@@ -35,9 +35,8 @@ RUN apk --no-cache add curl python3 py3-pip
 RUN curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/youtube-dl && \
     chmod a+rx /usr/local/bin/youtube-dl
 
-# Install AWS CLI using pip
-RUN python3 -m ensurepip && \
-    pip3 install --upgrade awscli
+# Install AWS CLI using apk package manager
+RUN apk --no-cache add aws-cli
 
 # Set AWS CLI default configuration
 RUN aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
