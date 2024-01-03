@@ -39,11 +39,11 @@ RUN curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o 
 RUN apk --no-cache add aws-cli
 
 # Create an entrypoint script
-COPY entrypoint.sh entrypoint.sh
-RUN chmod +x entrypoint.sh
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Set AWS CLI default configuration during container startup
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 # Expose port 8080 to the outside world
 EXPOSE 8080
