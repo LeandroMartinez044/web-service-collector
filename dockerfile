@@ -36,7 +36,8 @@ RUN curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o 
     chmod a+rx /usr/local/bin/youtube-dl
 
 # Install AWS CLI using pip
-RUN pip3 install --upgrade awscli
+RUN python3 -m ensurepip && \
+    pip3 install --upgrade awscli
 
 # Set AWS CLI default configuration
 RUN aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
