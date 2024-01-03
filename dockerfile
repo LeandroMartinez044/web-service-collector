@@ -35,10 +35,15 @@ RUN apk --no-cache add curl python3
 RUN curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/youtube-dl && \
     chmod a+rx /usr/local/bin/youtube-dl
 
+# Install AWS CLI using pip
+RUN pip3 install --upgrade awscli
+
 # Set environment variables
-ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-ENV AWS_SECRET_ACCESS_KEY=${SECRET_ACCESS_KEY}
-ENV AWS_DEFAULT_REGION=us-east-1
+# Set AWS CLI default configuration
+RUN aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
+RUN aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
+RUN aws configure set default.region ${AWS_REGION}
+RUN aws configure set default.output json
 
 # Expose port 8080 to the outside world
 EXPOSE 8080
