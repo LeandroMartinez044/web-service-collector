@@ -29,7 +29,7 @@ WORKDIR /web-service-collector
 COPY --from=builder /web-service-collector .
 
 # Install youtube-dl dependencies
-RUN apk --no-cache add curl python3
+RUN apk --no-cache add curl python3 py3-pip 
 
 # Install youtube-dl
 RUN curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/youtube-dl && \
@@ -38,7 +38,6 @@ RUN curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o 
 # Install AWS CLI using pip
 RUN pip3 install --upgrade awscli
 
-# Set environment variables
 # Set AWS CLI default configuration
 RUN aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
 RUN aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
