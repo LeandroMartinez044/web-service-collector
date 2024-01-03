@@ -38,15 +38,12 @@ RUN curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o 
 # Install AWS CLI using apk package manager
 RUN apk --no-cache add aws-cli
 
-# Set AWS CLI default configuration during image build
-ARG AWS_ACCESS_KEY_ID
-ARG AWS_SECRET_ACCESS_KEY
-ARG AWS_REGION
+# Create an entrypoint script
+COPY entrypoint.sh entrypoint.sh
+RUN chmod +x entrypoint.sh
 
-RUN aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID && \
-    aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY && \
-    aws configure set default.region $AWS_REGION && \
-    aws configure set default.output json
+# Set AWS CLI default configuration during container startup
+ENTRYPOINT ["entrypoint.sh"]
 
 # Expose port 8080 to the outside world
 EXPOSE 8080
